@@ -19,3 +19,4 @@ todo
 /logs/*.log
 .undodir
 Session.vim
+apiKeys.json

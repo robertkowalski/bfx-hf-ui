@@ -224,6 +224,10 @@ export default {
     payload: { exID, aos },
   }),
 
+  clearAlgoOrders: () => ({
+    type: t.CLEAR_ALGO_ORDERS,
+  }),
+
   recvNotification: notification => ({
     type: t.DATA_NOTIFICATION,
     payload: { notification },
@@ -298,7 +302,7 @@ export default {
     type: t.PURGE_DATA_BACKTEST,
   }),
 
-  initAuth: password => send(['auth.init', password]),
-  auth: password => send(['auth.submit', password]),
+  initAuth: password => send(['auth.init', password, 'main']),
+  auth: (password, mode) => send(['auth.submit', password, mode]),
   resetAuth: () => send(['auth.reset']),
 }

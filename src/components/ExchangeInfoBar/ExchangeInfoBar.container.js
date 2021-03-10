@@ -1,4 +1,5 @@
 import { connect } from 'react-redux'
+import _isEqual from 'lodash/isEqual'
 
 import WSActions from '../../redux/actions/ws'
 import UIActions from '../../redux/actions/ui'
@@ -11,10 +12,11 @@ import ExchangeInfoBar from './ExchangeInfoBar'
 const mapStateToProps = (state = {}) => {
   const activeExchange = getActiveExchange(state)
   const activeMarket = getActiveMarket(state)
-  const { ui = {}, ws = {} } = state
-  const { isNotificationsOpened } = ui
-  const { favoriteTradingPairs = {} } = ws
-  const { favoritePairs = [] } = favoriteTradingPairs
+  const { ui = {} } = state
+  const {
+    isNotificationsOpened,
+  } = ui
+
   return {
     activeExchange,
     activeMarket,
@@ -23,7 +25,6 @@ const mapStateToProps = (state = {}) => {
     markets: getMarkets(state),
     isNotificationsOpened,
     authToken: getAuthToken(state),
-    favoritePairs,
   }
 }
 
@@ -33,6 +34,9 @@ const mapDispatchToProps = dispatch => ({
   },
 
   onChangeMarket: (exchange, market, prevMarket) => {
+    if (_isEqual(market, prevMarket)) {
+      return
+    }
     dispatch(WSActions.removeChannelRequirement(exchange, ['ticker', prevMarket]))
     dispatch(UIActions.setActiveMarket(market))
     dispatch(WSActions.addChannelRequirement(exchange, ['ticker', market]))
@@ -47,13 +51,8 @@ const mapDispatchToProps = dispatch => ({
   openNotifications: () => {
     dispatch(UIActions.openNotifcationPanel())
   },
-
-  savePairs: (pairs, authToken) => {
-    dispatch(WSActions.send([
-      'favourite_trading_pairs.save',
-      authToken,
-      pairs,
-    ]))
+  onRefillClick: () => {
+    dispatch(UIActions.changeReffilBalanceModalState(true))
   },
 })
 

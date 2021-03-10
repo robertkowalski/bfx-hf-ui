@@ -5,13 +5,14 @@ import { getExchanges, getMarkets } from '../../redux/selectors/meta'
 import UIActions from '../../redux/actions/ui'
 import WSActions from '../../redux/actions/ws'
 import GAActions from '../../redux/actions/google_analytics'
+import { getActiveAlgoOrders } from '../../redux/actions/ao'
 
 import {
   getAPIClientStates, getAuthToken, getAPICredentials,
 } from '../../redux/selectors/ws'
 
 import {
-  getComponentState, getActiveExchange, getActiveMarket,
+  getComponentState, getActiveExchange, getActiveMarket, getCurrentMode,
 } from '../../redux/selectors/ui'
 
 const mapStateToProps = (state = {}, ownProps = {}) => {
@@ -36,6 +37,7 @@ const mapStateToProps = (state = {}, ownProps = {}) => {
     dms,
     ga,
     firstLogin,
+    currentMode: getCurrentMode(state),
   }
 }
 
@@ -50,13 +52,14 @@ const mapDispatchToProps = dispatch => ({
 
   submitAPIKeys: ({
     exID, authToken, apiKey, apiSecret,
-  }) => {
+  }, mode) => {
     dispatch(WSActions.send([
       'api_credentials.save',
       authToken,
       exID,
       apiKey,
       apiSecret,
+      mode,
     ]))
   },
   gaUpdateSettings: () => {
@@ -72,6 +75,7 @@ const mapDispatchToProps = dispatch => ({
       ga,
     ]))
   },
+  getActiveAOs: () => dispatch(getActiveAlgoOrders()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Settings)

@@ -1,7 +1,9 @@
 import _isArray from 'lodash/isArray'
 import Debug from 'debug'
 
+import UIActions from '../../actions/ui'
 import WSActions from '../../actions/ws'
+import AOActions from '../../actions/ao'
 
 const debug = Debug('hfui:rx:m:ws-hfui-server:msg')
 
@@ -48,6 +50,7 @@ export default (ws, store) => (e = {}) => {
     case 'info.auth_token': {
       const [, token] = payload
       store.dispatch(WSActions.recvAuthToken(token))
+      store.dispatch(AOActions.getActiveAlgoOrders())
       break
     }
 
@@ -254,6 +257,19 @@ export default (ws, store) => (e = {}) => {
     case 'bt.btresult': {
       const [, res] = payload
       store.dispatch(WSActions.recvBacktestResults(res))
+      break
+    }
+
+    case 'algo.active_orders': {
+      const [, activeAlgoOrders] = payload
+      store.dispatch(AOActions.setActiveAlgoOrders(activeAlgoOrders))
+      store.dispatch(AOActions.showActiveOrdersModal(true))
+      break
+    }
+
+    case 'algo.cancel_orders': {
+      store.dispatch(WSActions.clearAlgoOrders())
+      store.dispatch(UIActions.setFilteredValueWithKey('filteredAO', []))
       break
     }
 

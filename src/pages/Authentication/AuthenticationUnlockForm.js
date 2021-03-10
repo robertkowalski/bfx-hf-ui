@@ -89,6 +89,7 @@ export default class AuthenticationInit extends React.Component {
           </div>
 
           <Button
+            dataUid='helloivan'
             onClick={this.onUnlock}
             disabled={!submitReady}
             label='Unlock'

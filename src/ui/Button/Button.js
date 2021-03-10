@@ -11,6 +11,7 @@ export default class Button extends React.PureComponent {
   render() {
     const {
       onClick, label, red, green, blue, gray, className, dataProduct, disabled,
+      dataUid,
     } = this.props
 
     return (
@@ -25,6 +26,7 @@ export default class Button extends React.PureComponent {
           green,
           disabled,
         })}
+        data-uid={dataUid || label}
       >
         {label}
       </button>

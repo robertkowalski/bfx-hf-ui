@@ -7,6 +7,7 @@ describe('Submit API Keys', () => {
 
     })
     it('Login and submit API keys', () => {
+        cy.contains('Enter your password to unlock.').should('be.visible')
         cy.get('[placeholder="Password"]').type('test1')
         cy.get('.green').click()
     })

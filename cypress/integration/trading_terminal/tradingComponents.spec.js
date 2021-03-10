@@ -34,5 +34,7 @@ describe('Manipulate components', () => {
     it('Drag component', () => {
         cy.get('.icon-move').trigger('mousedown').trigger('mousemove', { clientX: 1000, clientY: 200 }).trigger('mouseleave')
     })
-    it('Resize component')
+    it('Resize component', () => {
+        cy.get('.icon').click()
+    })
 })
